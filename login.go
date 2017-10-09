@@ -17,6 +17,10 @@ type Params struct {
 
 var LINE_LOGIN_URL = "https://access.line.me/oauth2/v2.1/authorize"
 
+func New() Params {
+	return Params{}
+}
+
 func (param Params) Parameters(channel_id string, channel_secret string, redirect string) error {
 	param.ResponseType = "code"
 	param.ClientID = channel_id
