@@ -1,4 +1,4 @@
-package line_login_test
+package lineogintest
 
 import (
 	"encoding/base64"

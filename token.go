@@ -1,4 +1,4 @@
-package line_token
+package token
 
 import (
 	"fmt"
