@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/sys-cat/line-login-test"
+	_ "github.com/sys-cat/linelogin"
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
