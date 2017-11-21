@@ -25,7 +25,7 @@ func (param Params) Parameters(channel_id string, channel_secret string, redirec
 	param.ResponseType = "code"
 	param.ClientID = channel_id
 	param.RedirectURL = base64.StdEncoding.EncodeToString([]byte(redirect))
-	param.State = time.Now().Unix()
+	param.State = fmt.Sprint(time.Now().Unix())
 	param.Scope = "Profile"
 	return nil
 }

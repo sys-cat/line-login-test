@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	_ "github.com/sys-cat/linelogin"
 )
@@ -13,8 +14,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func line_login(w http.ResponseWriter, r *http.Request) {
-	urlParam := line_login_test.New()
-	if err := urlParam.Parameters(os.Getev("CHANNEL_ID"), os.Getev("CHANNE_SECRET"), os.Getev("REDIRECT_URL")); err != nil {
+	urlParam := linelogin.New()
+	if err := urlParam.Parameters(os.Getenv("CHANNEL_ID"), os.Getenv("CHANNE_SECRET"), os.Getenv("REDIRECT_URL")); err != nil {
 		fmt.Fprintln("<p>missing render: %s</p>", err.Error)
 	}
 	http.Redirect(w, r, urlParam.OutputURL(), 301)
