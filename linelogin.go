@@ -21,7 +21,7 @@ func New() Params {
 	return Params{}
 }
 
-func (param Params) Parameters(channel_id string, channel_secret string, redirect string) error {
+func (param *Params) Parameters(channel_id string, channel_secret string, redirect string) error {
 	param.ResponseType = "code"
 	param.ClientID = channel_id
 	param.RedirectURL = base64.StdEncoding.EncodeToString([]byte(redirect))
@@ -30,11 +30,11 @@ func (param Params) Parameters(channel_id string, channel_secret string, redirec
 	return nil
 }
 
-func (param Params) OutputURL() string {
+func (param *Params) OutputURL() string {
 	value := url.Values{}
 	value.Set("response_type", param.ResponseType)
 	value.Add("client_id", param.ClientID)
-	value.Add("redirect_url", param.RedirectURL)
+	value.Add("redirect_uri", param.RedirectURL)
 	value.Add("state", param.State)
 	value.Add("scope", param.Scope)
 	values := value.Encode()
