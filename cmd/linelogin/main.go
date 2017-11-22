@@ -22,18 +22,31 @@ func line_login(w http.ResponseWriter, r *http.Request) {
 		data := fmt.Sprintf("<p>missing render: %s</p>", err.Error)
 		fmt.Fprintf(w, data)
 	}
-	//fmt.Fprintf(w, urlParam.OutputURL())
 	http.Redirect(w, r, urlParam.OutputURL(), 301)
 }
 
+func line_login_test(w http.ResponseWriter, r *http.Request) {
+	log.Println("access build")
+	urlParam := linelogin.New()
+	err := urlParam.Parameters(os.Getenv("CHANNEL_ID"), os.Getenv("CHANNEL_SECRET"), os.Getenv("REDIRECT_URL"))
+	if err != nil {
+		data := fmt.Sprintf("<p>missing render: %s</p>", err.Error)
+		fmt.Fprintf(w, data)
+	}
+	data := fmt.Sprint(urlParam.OutputURL())
+	log.Println(data)
+	fmt.Fprintf(w, data)
+}
+
 func redirect(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("%+v", r)
+	fmt.Fprintf(w, fmt.Sprint(r))
 }
 
 func main() {
 	log.Println("------start server-----")
-	http.HandleFunc("/", index)
-	http.HandleFunc("/line_login", line_login)
+	http.HandleFunc("/index", index)
+	http.HandleFunc("/line", line_login)
+	http.HandleFunc("/build", line_login_test)
 	http.HandleFunc("/redirect", redirect)
 	log.Fatal(http.ListenAndServe(":9090", nil))
 }

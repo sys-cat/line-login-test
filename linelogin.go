@@ -1,7 +1,6 @@
 package linelogin
 
 import (
-	"encoding/base64"
 	"fmt"
 	"net/url"
 	"time"
@@ -24,9 +23,10 @@ func New() Params {
 func (param *Params) Parameters(channel_id string, channel_secret string, redirect string) error {
 	param.ResponseType = "code"
 	param.ClientID = channel_id
-	param.RedirectURL = base64.StdEncoding.EncodeToString([]byte(redirect))
+	//param.RedirectURL = base64.StdEncoding.EncodeToString([]byte(redirect))
+	param.RedirectURL = url.QueryEscape(redirect)
 	param.State = fmt.Sprint(time.Now().Unix())
-	param.Scope = "Profile"
+	param.Scope = "profile"
 	return nil
 }
 
@@ -37,6 +37,7 @@ func (param *Params) OutputURL() string {
 	value.Add("redirect_uri", param.RedirectURL)
 	value.Add("state", param.State)
 	value.Add("scope", param.Scope)
+	value.Add("nonce", fmt.Sprint(time.Now().Unix()))
 	values := value.Encode()
 	return fmt.Sprintf("%s?%s", LINE_LOGIN_URL, values)
 }
