@@ -74,7 +74,7 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Get Profile miss %s\n", err)
 		log.Fatal("cant get profile data")
 	}
-	io.WriteString(w, fmt.Sprintf("<img src=\"%s\" alt=\"profile image\">\n", profile.PictureURL))
+	io.WriteString(w, fmt.Sprintf("<img src=\"%s/small\" alt=\"profile image\">\n", profile.PictureURL))
 	list := fmt.Sprintf("<ul>\n\t<li>ID: %s</li>\n\t<li>Name: %s</li>\n\t<li>Message: %s</li>\n</ul>\n", profile.UserID, profile.DisplayName, profile.StatusMessage)
 	io.WriteString(w, list)
 }
