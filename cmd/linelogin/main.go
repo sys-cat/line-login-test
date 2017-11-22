@@ -60,7 +60,7 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%+v\n", state)
 	if state == "" {
 		fmt.Fprintf(w, "Invalid access\n")
-		log.Error("state is unload")
+		log.Fatal("state is unload")
 	}
 	newToken := token.New()
 	err := newToken.Parameters(code, os.Getenv("REDIRECT_URL"), os.Getenv("CHANNEL_ID"), os.Getenv("CHANNEL_SECRET"))
