@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/sys-cat/linelogin"
+	"github.com/sys-cat/linelogin/profile"
 	"github.com/sys-cat/linelogin/token"
 )
 
@@ -72,7 +73,14 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "Get Token miss %s\n", err)
 	}
-	io.WriteString(w, fmt.Sprintf("%+v\n", res))
+	profile, err := profile.GetProfileData(res.AccessToken)
+	if err != nil {
+		fmt.Fprintf(w, "Get Profile miss %s\n", err)
+		log.Fatal("cant get profile data")
+	}
+	io.WriteString(w, fmt.Sprintf("<img src=\"%s/large\" alt=\"profile image\">\n", profile.PictureURL))
+	list := fmt.Sprintf("<ul>\n\t<li>ID: %s</li>\n\t<li>Name: %s</li>\n\t<li>Message: %s</li>\n</ul>\n", profile.UserID, profile.DisplayName, profile.StatusMessage)
+	io.WriteString(w, list)
 }
 
 func main() {
