@@ -12,6 +12,12 @@ import (
 func index(w http.ResponseWriter, r *http.Request) {
 	log.Println("access index")
 	fmt.Fprintf(w, "<h1>This is sys-cat test site</h1>")
+	url := linelogin.New()
+	err := url.Parameters(os.Getenv("CHANNEL_ID"), os.Getenv("CHANNEL_SECRET"), os.Getenv("REDIRECT_URL"))
+	if err != nil {
+		fmt.Fprintf(w, "<p style=\"color:red;\">link url build error !</p>")
+	}
+	fmt.Sprintf("<a href=\"%s\">Line Login</a>", url.OutputURL())
 }
 
 func line_login(w http.ResponseWriter, r *http.Request) {
