@@ -54,11 +54,8 @@ func line_login_test(w http.ResponseWriter, r *http.Request) {
 func redirect(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html;charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "%+v\n", r.URL.Query())
 	code := r.URL.Query().Get("code")
-	fmt.Fprintf(w, "%+v\n", code)
 	state := r.URL.Query().Get("state")
-	fmt.Fprintf(w, "%+v\n", state)
 	if state == "" {
 		fmt.Fprintf(w, "Invalid access\n")
 		log.Fatal("state is unload")
@@ -68,7 +65,6 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "Invalid parameters\n")
 	}
-	fmt.Fprintf(w, "token parameters %+v\n", newToken)
 	res, err := token.GetToken(newToken)
 	if err != nil {
 		fmt.Fprintf(w, "Get Token miss %s\n", err)
@@ -78,7 +74,7 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Get Profile miss %s\n", err)
 		log.Fatal("cant get profile data")
 	}
-	io.WriteString(w, fmt.Sprintf("<img src=\"%s/large\" alt=\"profile image\">\n", profile.PictureURL))
+	io.WriteString(w, fmt.Sprintf("<img src=\"%s\" alt=\"profile image\">\n", profile.PictureURL))
 	list := fmt.Sprintf("<ul>\n\t<li>ID: %s</li>\n\t<li>Name: %s</li>\n\t<li>Message: %s</li>\n</ul>\n", profile.UserID, profile.DisplayName, profile.StatusMessage)
 	io.WriteString(w, list)
 }
