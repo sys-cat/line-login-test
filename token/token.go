@@ -49,7 +49,7 @@ func (req *Request) BuildParams() url.Values {
 	value := url.Values{}
 	value.Set("grant_type", req.GrantType)
 	value.Add("code", req.Code)
-	value.Add("redirect_url", req.RedirectURL)
+	value.Add("redirect_uri", req.RedirectURL)
 	value.Add("client_id", req.ClientID)
 	value.Add("client_secret", req.ClientSecret)
 	return value
