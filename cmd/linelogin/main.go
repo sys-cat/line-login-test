@@ -50,7 +50,24 @@ func line_login_test(w http.ResponseWriter, r *http.Request) {
 }
 
 func redirect(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, fmt.Sprint(r))
+	w.Header().Set("Content-Type", "text/html;charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprintf(w, r.URL.Query())
+	code := r.URL.Query().Get("code")
+	state := r.URL.Query().Get("state")
+	if state != nil {
+		fmt.Fprintf(w, "Invalid access")
+	}
+	newToken := token.New()
+	err := newToken.Parameters(code, os.Getenv("REDIRECT_URL"), os.Getenv("CHANNEL_ID"), os.Getenv("CHANNEL_SECRET"))
+	if err != nil {
+		fmt.Fprintf(w, "Invalid parameters")
+	}
+	res, err := token.GetToken(newToken)
+	if err != nil {
+		fmt.Fprintf(w, "Get Token miss %s", err.Error)
+	}
+	io.WriteString(w, res)
 }
 
 func main() {

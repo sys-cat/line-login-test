@@ -30,7 +30,11 @@ type (
 	}
 )
 
-func (req Request) Parameters(code string, url string, channel_id string, channel_secret string) error {
+func New() Request {
+	return Request{}
+}
+
+func (req *Request) Parameters(code string, url string, channel_id string, channel_secret string) error {
 	req.GrantType = "authorization_code"
 	req.Code = code
 	req.RedirectURL = url
@@ -39,7 +43,7 @@ func (req Request) Parameters(code string, url string, channel_id string, channe
 	return nil
 }
 
-func (req Request) BuildParams() url.Values {
+func (req *Request) BuildParams() url.Values {
 	value := url.Values{}
 	value.Set("grant_type", req.GrantType)
 	value.Add("code", req.Code)
