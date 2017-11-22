@@ -56,7 +56,7 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%+v", r.URL.Query())
 	code := r.URL.Query().Get("code")
 	state := r.URL.Query().Get("state")
-	if state != nil {
+	if state != "" {
 		fmt.Fprintf(w, "Invalid access")
 	}
 	newToken := token.New()
@@ -68,7 +68,7 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "Get Token miss %s", err.Error)
 	}
-	io.WriteString(w, res)
+	io.WriteString(w, fmt.Sprintf("%+v", res))
 }
 
 func main() {
