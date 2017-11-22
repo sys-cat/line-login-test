@@ -18,7 +18,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "<p style=\"color:red;\">link url build error !</p>")
 	}
 	link := fmt.Sprintf("<a href=\"%s\">Line Login</a>", url.OutputURL())
-	fmt.Fprintf(w, link)
+	fmt.Printf("%s", link)
 }
 
 func line_login(w http.ResponseWriter, r *http.Request) {

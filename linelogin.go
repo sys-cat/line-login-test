@@ -23,7 +23,6 @@ func New() Params {
 func (param *Params) Parameters(channel_id string, channel_secret string, redirect string) error {
 	param.ResponseType = "code"
 	param.ClientID = channel_id
-	//param.RedirectURL = base64.StdEncoding.EncodeToString([]byte(redirect))
 	param.RedirectURL = redirect
 	param.State = fmt.Sprint(time.Now().Unix())
 	param.Scope = "profile"
