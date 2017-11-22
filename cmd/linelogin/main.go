@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/sys-cat/linelogin"
+	"github.com/sys-cat/linelogin/token"
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +53,7 @@ func line_login_test(w http.ResponseWriter, r *http.Request) {
 func redirect(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html;charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, r.URL.Query())
+	fmt.Fprintf(w, "%+v", r.URL.Query())
 	code := r.URL.Query().Get("code")
 	state := r.URL.Query().Get("state")
 	if state != nil {
