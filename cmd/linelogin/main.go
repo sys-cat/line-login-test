@@ -70,7 +70,7 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "token parameters %+v\n", newToken)
 	res, err := token.GetToken(newToken)
 	if err != nil {
-		fmt.Fprintf(w, "Get Token miss %s\n", err.Error)
+		fmt.Fprintf(w, "Get Token miss %s\n", err)
 	}
 	io.WriteString(w, fmt.Sprintf("%+v\n", res))
 }
