@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -10,6 +11,8 @@ import (
 )
 
 func index(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html;charset=utf-8")
+	w.WriteHeader(http.StatusOK)
 	log.Println("access index")
 	fmt.Fprintf(w, "<h1>This is sys-cat test site</h1>")
 	url := linelogin.New()
@@ -19,7 +22,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("%+v\n", url.OutputURL())
 	link := fmt.Sprintf("<a href=\"%s\">Line Login</a>", url.OutputURL())
-	fmt.Printf("%s", link)
+	io.WriteString(w, link)
 }
 
 func line_login(w http.ResponseWriter, r *http.Request) {
