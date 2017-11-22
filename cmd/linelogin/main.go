@@ -58,14 +58,16 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%+v\n", code)
 	state := r.URL.Query().Get("state")
 	fmt.Fprintf(w, "%+v\n", state)
-	if state != "" {
+	if state == "" {
 		fmt.Fprintf(w, "Invalid access\n")
+		panic()
 	}
 	newToken := token.New()
 	err := newToken.Parameters(code, os.Getenv("REDIRECT_URL"), os.Getenv("CHANNEL_ID"), os.Getenv("CHANNEL_SECRET"))
 	if err != nil {
 		fmt.Fprintf(w, "Invalid parameters\n")
 	}
+	fmt.Fprintf(w, "token parameters %+v\n", newToken)
 	res, err := token.GetToken(newToken)
 	if err != nil {
 		fmt.Fprintf(w, "Get Token miss %s\n", err.Error)
