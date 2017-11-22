@@ -63,7 +63,7 @@ func GetToken(req Request) (res Response, err error) {
 		return res, err
 	}
 
-	newreq.Header.Set("content-type", CONTENT_TYPE)
+	newreq.Header.Set("Content-Type", CONTENT_TYPE)
 
 	client := &http.Client{}
 	resp, err := client.Do(newreq)
@@ -71,6 +71,9 @@ func GetToken(req Request) (res Response, err error) {
 		return res, err
 	}
 	defer resp.Body.Close()
+	fmt.Printf("%+v\n", resp)
+	fmt.Printf("Status Code: %s\n", resp.StatusCode)
+	fmt.Printf("Header : %+v\n", resp.Header)
 	body_byte, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return res, err
