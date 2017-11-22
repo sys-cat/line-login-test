@@ -75,6 +75,6 @@ func GetToken(req Request) (res Response, err error) {
 	if err != nil {
 		return res, err
 	}
-	fmt.Println(body_byte)
+	fmt.Printf("%+v\n", body_byte)
 	return res, nil
 }
