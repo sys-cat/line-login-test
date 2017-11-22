@@ -23,12 +23,12 @@ type (
 	}
 
 	Response struct {
-		AccessToken  string
-		ExpiresIn    int64
-		IDToken      string
-		RefreshToken string
-		Scope        string
-		TokenType    string
+		AccessToken  string `json:"access_token"`
+		ExpiresIn    int64  `json:"expires_in"`
+		IDToken      string `json:"id_token"`
+		RefreshToken string `json:"refresh_token"`
+		Scope        string `json:"scope"`
+		TokenType    string `json:"token_type"`
 	}
 )
 
