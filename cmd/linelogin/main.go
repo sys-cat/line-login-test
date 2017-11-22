@@ -55,5 +55,5 @@ func main() {
 	http.HandleFunc("/line", line_login)
 	http.HandleFunc("/build", line_login_test)
 	http.HandleFunc("/redirect", redirect)
-	log.Fatal(http.ListenAndServe(":9090", nil))
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
