@@ -53,22 +53,24 @@ func line_login_test(w http.ResponseWriter, r *http.Request) {
 func redirect(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html;charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "%+v", r.URL.Query())
+	fmt.Fprintf(w, "%+v\n", r.URL.Query())
 	code := r.URL.Query().Get("code")
+	fmt.Fprintf(w, "%+v\n", code)
 	state := r.URL.Query().Get("state")
+	fmt.Fprintf(w, "%+v\n", state)
 	if state != "" {
-		fmt.Fprintf(w, "Invalid access")
+		fmt.Fprintf(w, "Invalid access\n")
 	}
 	newToken := token.New()
 	err := newToken.Parameters(code, os.Getenv("REDIRECT_URL"), os.Getenv("CHANNEL_ID"), os.Getenv("CHANNEL_SECRET"))
 	if err != nil {
-		fmt.Fprintf(w, "Invalid parameters")
+		fmt.Fprintf(w, "Invalid parameters\n")
 	}
 	res, err := token.GetToken(newToken)
 	if err != nil {
-		fmt.Fprintf(w, "Get Token miss %s", err.Error)
+		fmt.Fprintf(w, "Get Token miss %s\n", err.Error)
 	}
-	io.WriteString(w, fmt.Sprintf("%+v", res))
+	io.WriteString(w, fmt.Sprintf("%+v\n", res))
 }
 
 func main() {
