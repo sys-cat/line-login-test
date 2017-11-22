@@ -80,7 +80,7 @@ func GetToken(req Request) (res Response, err error) {
 	if err != nil {
 		return res, err
 	}
-	err := json.Unmarshal(body_byte, &res)
+	err = json.Unmarshal(body_byte, &res)
 	if err != nil {
 		return Response{}, err
 	}
