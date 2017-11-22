@@ -17,6 +17,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "<p style=\"color:red;\">link url build error !</p>")
 	}
+	fmt.Printf("%+v", url.OutputURL())
 	link := fmt.Sprintf("<a href=\"%s\">Line Login</a>", url.OutputURL())
 	fmt.Printf("%s", link)
 }
