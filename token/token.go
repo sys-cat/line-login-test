@@ -1,6 +1,8 @@
 package token
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -21,12 +23,12 @@ type (
 	}
 
 	Response struct {
-		Token     string
-		Expire    int64
-		TokenID   string
-		Refresh   string
-		Scope     string
-		TokenType string
+		AccessToken  string
+		ExpiresIn    int64
+		IDToken      string
+		RefreshToken string
+		Scope        string
+		TokenType    string
 	}
 )
 
@@ -71,13 +73,13 @@ func GetToken(req Request) (res Response, err error) {
 		return res, err
 	}
 	defer resp.Body.Close()
-	fmt.Printf("%+v\n", resp)
-	fmt.Printf("Status Code: %s\n", resp.StatusCode)
-	fmt.Printf("Header : %+v\n", resp.Header)
+	if resp.StatusCode != 200 {
+		return res, errors.New(fmt.Sprintf("response is invalid, status code is %d", resp.StatusCode))
+	}
 	body_byte, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return res, err
 	}
-	fmt.Printf("%+v\n", body_byte)
+	err := json.Unmarshal(body_byte, &res)
 	return res, nil
 }
