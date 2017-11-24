@@ -27,38 +27,14 @@ func index(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, link)
 }
 
-func line_login(w http.ResponseWriter, r *http.Request) {
-	log.Println("access line")
-	urlParam := linelogin.New()
-	err := urlParam.Parameters(os.Getenv("CHANNEL_ID"), os.Getenv("CHANNEL_SECRET"), os.Getenv("REDIRECT_URL"))
-	if err != nil {
-		data := fmt.Sprintf("<p>missing render: %s</p>", err.Error)
-		fmt.Fprintf(w, data)
-	}
-	http.Redirect(w, r, urlParam.OutputURL(), 301)
-}
-
-func line_login_test(w http.ResponseWriter, r *http.Request) {
-	log.Println("access build")
-	urlParam := linelogin.New()
-	err := urlParam.Parameters(os.Getenv("CHANNEL_ID"), os.Getenv("CHANNEL_SECRET"), os.Getenv("REDIRECT_URL"))
-	if err != nil {
-		data := fmt.Sprintf("<p>missing render: %s</p>", err.Error)
-		fmt.Fprintf(w, data)
-	}
-	data := fmt.Sprint(urlParam.OutputURL())
-	log.Println(data)
-	fmt.Fprintf(w, data)
-}
-
 func redirect(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html;charset=utf-8")
 	w.WriteHeader(http.StatusOK)
+	log.Println("access redirect")
 	code := r.URL.Query().Get("code")
 	state := r.URL.Query().Get("state")
 	if state == "" {
 		fmt.Fprintf(w, "Invalid access\n")
-		log.Fatal("state is unload")
 	}
 	newToken := token.New()
 	err := newToken.Parameters(code, os.Getenv("REDIRECT_URL"), os.Getenv("CHANNEL_ID"), os.Getenv("CHANNEL_SECRET"))
@@ -71,19 +47,18 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 	}
 	profile, err := profile.GetProfileData(res.AccessToken)
 	if err != nil {
-		fmt.Fprintf(w, "Get Profile miss %s\n", err)
-		log.Fatal("cant get profile data")
+		io.WriteString(w, fmt.Sprintf("<h4>Get Profile miss %s</h4>\n", err))
 	}
-	io.WriteString(w, fmt.Sprintf("<img src=\"%s/small\" alt=\"profile image\">\n", profile.PictureURL))
-	list := fmt.Sprintf("<ul>\n\t<li>ID: %s</li>\n\t<li>Name: %s</li>\n\t<li>Message: %s</li>\n</ul>\n", profile.UserID, profile.DisplayName, profile.StatusMessage)
-	io.WriteString(w, list)
+	if err == nil {
+		io.WriteString(w, fmt.Sprintf("<img src=\"%s/small\" alt=\"profile image\">\n", profile.PictureURL))
+		list := fmt.Sprintf("<ul>\n\t<li>ID: %s</li>\n\t<li>Name: %s</li>\n\t<li>Message: %s</li>\n</ul>\n", profile.UserID, profile.DisplayName, profile.StatusMessage)
+		io.WriteString(w, list)
+	}
 }
 
 func main() {
 	log.Println("------start server-----")
 	http.HandleFunc("/index", index)
-	http.HandleFunc("/line", line_login)
-	http.HandleFunc("/build", line_login_test)
 	http.HandleFunc("/redirect", redirect)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
