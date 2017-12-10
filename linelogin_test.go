@@ -42,7 +42,7 @@ func TestParameters(t *testing.T) {
 	channel_secret := "test channel secret"
 	redirect := "test redirect url"
 	param.Parameters(channel_id, channel_secret, redirect)
-	if param.ChannelID == channel_id {
+	if param.ClientID == channel_id {
 		t.Log("channel_id is clean")
 	} else {
 		t.Fatal("channel_id is invalid")
