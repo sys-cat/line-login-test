@@ -45,6 +45,7 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, "Get Token miss %s\n", err)
 	}
+	log.Println(fmt.Sprintf("id_token: %s", res.IDToken))
 	profile, err := profile.GetProfileData(res.AccessToken)
 	if err != nil {
 		io.WriteString(w, fmt.Sprintf("<h4>Get Profile miss %s</h4>\n", err))
