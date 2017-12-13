@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	jwt "github.com/dgrijalva/jwt-go"
 )
 
 var LINE_TOKEN_URL = "https://api.line.me/oauth2/v2.1/token"
@@ -29,6 +31,17 @@ type (
 		RefreshToken string `json:"refresh_token"`
 		Scope        string `json:"scope"`
 		TokenType    string `json:"token_type"`
+	}
+
+	Token struct {
+		Iss     string
+		Sub     string
+		Aud     string
+		Exp     int64  // token enable limit unix time
+		Iat     int64  // generate id_token unix time
+		Nonece  string // require set "nonece" value
+		Name    string // require add "profile" to scope
+		Picture string // require add "profile" to scope
 	}
 )
 
@@ -85,4 +98,35 @@ func GetToken(req Request) (res Response, err error) {
 		return Response{}, err
 	}
 	return res, nil
+}
+
+func ParseIDToken(res Response, secret string) (token Token, err error) {
+	// Parse jwt use secret
+	t, err := jwt.Parse(res.IDToken, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return token, fmt.Errorf("unexpexted signing method: %v", t.Header["token"])
+		}
+		return []byte(secret), nil
+	})
+	if err != nil {
+		return token, err
+	}
+	claim, ok := t.Claims.(jwt.MapClaims)
+	if ok && t.Valid {
+		if !res.Nonce {
+			return token, errors.New("unset nonece data")
+		}
+		if res.Nonce != claim["nonce"] {
+			return token, errors.New("invalid nonce from id_token")
+		}
+		token.Iss = claim["iss"]
+		token.Sub = claim["iss"]
+		token.Aud = claim["aud"]
+		token.Exp = claim["exp"]
+		token.Iat = claim["iat"]
+		token.Nonece = claim["nonce"]
+		token.Name = claim["name"]
+		token.Picture = claim["picture"]
+	}
+	return token, errors.New("parse missing.")
 }

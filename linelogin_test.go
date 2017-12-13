@@ -57,7 +57,7 @@ func TestParameters(t *testing.T) {
 	} else {
 		t.Fatal("state is invalid")
 	}
-	if param.Scope == "profile openid" {
+	if param.Scope == "profile openid email phone" {
 		t.Log("scope is clean")
 	} else {
 		t.Fatal("scope is invalid")

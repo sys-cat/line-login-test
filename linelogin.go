@@ -25,7 +25,7 @@ func (param *Params) Parameters(channel_id string, channel_secret string, redire
 	param.ClientID = channel_id
 	param.RedirectURL = redirect
 	param.State = fmt.Sprint(time.Now().Unix())
-	param.Scope = "profile openid"
+	param.Scope = "profile openid email phone"
 	return nil
 }
 
